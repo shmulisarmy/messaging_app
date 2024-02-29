@@ -17,19 +17,40 @@
             border-radius: 20px;
             margin: 10%;
         }
+        ul{
+            position: relative;
+        }
         ol{
             width: 20%;
             margin-left: 40%;
             margin-right: 40%;
+            
         }
         .messages{
-            min-height: 200px;
+            height: 200px;
+            overflow-y: auto;
+
+
+        }
+        .recent{
+            position: absolute;
+            top: 170px;
+            left: 20px;
+            border: 1px solid black;
+            border-radius: 20px;
+            padding: 7px;
+            background-color: white;
+            z-index: 1;
+            width: 150px;
+            height: 25px;
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
-    <h1>you are in room {{room}}</h1>
-    <h2>members</h2>
+    <h1>hello {{username}}</h1>
+    <h2>you are in room {{room}}</h2>
+    <h3>members</h3>
     <ol>
         {% for member in members %}
             <li>{{member}}</li>
@@ -63,6 +84,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
     
     <script type="text/babel">
+
         const { useState, useEffect } = React;
 
         function App() {
@@ -74,6 +96,7 @@
             useEffect(() => {
                 socket.on('message', data => {
                     setMessages(prevMessages => [...prevMessages, data]);
+                    recent_element.textContent = data;
                 });
 
                 return () => {
@@ -84,6 +107,7 @@
             const handleSubmit = event => {
                 event.preventDefault();
                 socket.send(message);
+                messages_element.scrollTop = messages_element.scrollHeight;
                 setMessage('');
             };
             
@@ -93,6 +117,7 @@
                         {messages.map((msg, index) => (
                             <li key={index}>{msg}</li>
                             ))}
+                        <div class="recent">recent</div>
                     </ul>
                     
                     <form onSubmit={handleSubmit}>
@@ -113,6 +138,10 @@
                 }
                         
         ReactDOM.render(<App />, document.getElementById('root'));
+        const messages_element = document.querySelector(".messages");
+        const recent_element = document.querySelector(".recent");
+
+
     </script>
 </body>
 </html>
