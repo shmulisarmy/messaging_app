@@ -1,12 +1,6 @@
 from flask import Flask, render_template, session, send_file, send_from_directory, request
 from flask_socketio import SocketIO, send, join_room, emit, leave_room
-from schedule import repeat, every
-import time, schedule
-from threading import Thread
 from datetime import datetime
-
-
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
